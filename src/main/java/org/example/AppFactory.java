@@ -12,6 +12,8 @@ import java.util.ArrayList;
 public class AppFactory {
 
     private static final ArrayList<DataProcessor> processors = new ArrayList<>();
+    private static final Object messageProcessorLock = new Object();
+    private static MessageProcessor messageProcessor;
 
     public static DataProcessor createProcessor() {
         var processor = new DataProcessor();
@@ -19,6 +21,16 @@ public class AppFactory {
 
         processors.add(processor);
         return processor;
+    }
+
+    public static MessageProcessor getMessageProcessor() {
+        synchronized (messageProcessorLock) {
+            if (messageProcessor == null) {
+                messageProcessor = new MessageProcessor();
+            }
+
+            return messageProcessor;
+        }
     }
 
     private static class _APIToken implements Serializable {
