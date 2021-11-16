@@ -36,7 +36,9 @@ public class App
         client.addUpdateHandler(TdApi.UpdateNewMessage.class, App::onUpdateNewMessage);
         client.start(authenticationData);
 
-
+        client.send(new TdApi.GetChat(234), chatIdResult -> {
+            System.out.println(chatIdResult);
+        });
         client.waitForExit();
     }
 
